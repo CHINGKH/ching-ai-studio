@@ -8,10 +8,8 @@ export default async function handler(req, res) {
   try {
     const { prompt, aspectRatio } = req.body;
     
-    // បង្កើត instance ជាមួយ Gemini API Key ដែលបានកំណត់ក្នុង Vercel Environment Variables
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-    // ប្រើប្រាស់ Imagen model របស់ Google សម្រាប់បង្កើតរូបភាព
     const response = await ai.models.generateImages({
       model: 'imagen-3.0-generate-002',
       prompt: prompt,
@@ -28,6 +26,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ imageUrl });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: error.message || 'Failed to generate image with Gemini API' });
+    return res.status(500).json({ error: error.message || 'Failed to generate image' });
   }
 }
