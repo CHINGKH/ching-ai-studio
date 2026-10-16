@@ -1,0 +1,9 @@
+{
+  "name": "ching-ai-studio",
+  "version": "1.0.0",
+  "description": "AI Image Studio using Gemini API",
+  "main": "index.html",
+  "dependencies": {
+    "@google/genai": "^0.1.1"
+  }
+}
