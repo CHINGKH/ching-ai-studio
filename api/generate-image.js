@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function (req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -8,10 +8,9 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in environment variables.' });
+      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured.' });
     }
 
-    // ប្រើប្រាស់ REST API ផ្ទាល់របស់ Google Gemini Imagen 3 ដោយមិនបាច់ត្រូវការ package ក្រៅ
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`, {
       method: 'POST',
       headers: {
@@ -41,4 +40,4 @@ export default async function handler(req, res) {
     console.error(error);
     return res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
-}
+};
