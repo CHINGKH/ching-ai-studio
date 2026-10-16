@@ -1,5 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
@@ -7,25 +5,40 @@ export default async function handler(req, res) {
 
   try {
     const { prompt, aspectRatio } = req.body;
-    
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const apiKey = process.env.GEMINI_API_KEY;
 
-    const response = await ai.models.generateImages({
-      model: 'imagen-3.0-generate-002',
-      prompt: prompt,
-      config: {
-        numberOfImages: 1,
-        outputMimeType: 'image/jpeg',
-        aspectRatio: aspectRatio || '1:1',
+    if (!apiKey) {
+      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in environment variables.' });
+    }
+
+    // ប្រើប្រាស់ REST API ផ្ទាល់របស់ Google Gemini Imagen 3 ដោយមិនបាច់ត្រូវការ package ក្រៅ
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        instances: [{ prompt: prompt }],
+        parameters: {
+          sampleCount: 1,
+          aspectRatio: aspectRatio || '1:1',
+          outputMimeType: 'image/jpeg'
+        }
+      })
     });
 
-    const base64ImageBytes = response.generatedImages[0].image.imageBytes;
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || 'Failed to generate image from Gemini API');
+    }
+
+    const base64ImageBytes = data.predictions[0].bytesBase64Encoded;
     const imageUrl = `data:image/jpeg;base64,${base64ImageBytes}`;
 
     return res.status(200).json({ imageUrl });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: error.message || 'Failed to generate image' });
+    return res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 }
