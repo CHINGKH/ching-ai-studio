@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ching AI Studio - បង្កើតរូបភាពដោយ AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-wand-magic-sparkles"></i> Ching AI Studio</h1>
+            <p>បង្កើតរូបភាពដ៏ស្រស់ស្អាតដោយប្រើប្រាស់កម្លាំង AI របស់ Gemini</p>
+        </header>
+
+        <main class="card">
+            <div class="input-group">
+                <label for="promptInput"><i class="fa-solid fa-pen-nib"></i>បរិយាយពីរូបភាពដែលអ្នកចង់បាន (Prompt):</label>
+                <textarea id="promptInput" rows="4" placeholder="ឧទាហរណ៍៖ ទេសភាពព្រះអាទិត្យលិចលើភ្នំ ស្ទីលគំនូរទឹក (Watercolor)..."></textarea>
+            </div>
+
+            <div class="options-row">
+                <div class="input-group">
+                    <label for="aspectRatio"><i class="fa-solid fa-expand"></i> ទំហំ / សមាមាត្រ (Aspect Ratio):</label>
+                    <select id="aspectRatio">
+                        <option value="1:1">1:1 (ការ៉េ)</option>
+                        <option value="16:9">16:9 (ផ្ដេក)</option>
+                        <option value="9:16">9:16 (បញ្ឈរ)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="generateBtn" class="btn-primary">
+                <i class="fa-solid fa-bolt"></i> ចាប់ផ្តើមបង្កើតរូបភាព AI
+            </button>
+        </main>
+
+        <section id="resultSection" class="card" style="display: none;">
+            <h2><i class="fa-solid fa-image"></i> លទ្ធផលរូបភាព</h2>
+            <div id="outputContainer" class="output-container">
+                <!-- រូបភាពនឹងបង្ហាញទីនេះ -->
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
